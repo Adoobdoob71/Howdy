@@ -1,6 +1,6 @@
-import { StyleSheet } from "react-native"
-import { DefaultTheme } from "@react-navigation/native"
-import { WIDTH } from "./constants"
+import { StyleSheet } from "react-native";
+import { DefaultTheme } from "@react-navigation/native";
+import { WIDTH } from "./constants";
 
 const sizes = {
   SIZE_1: WIDTH * (1 / 365),
@@ -42,24 +42,31 @@ const sizes = {
   SIZE_180: WIDTH * (180 / 365),
   SIZE_190: WIDTH * (190 / 365),
   SIZE_200: WIDTH * (200 / 365),
-} as const
+} as const;
 
-export { sizes }
+export { sizes };
 
 const theme: typeof DefaultTheme & {
   colors: {
-    primary_1: string
-    primary_2: string
-    primary_3: string
-    background_2: string
-    danger: string
-    success: string
-  }
+    primary_1: string;
+    primary_2: string;
+    primary_3: string;
+    background_2: string;
+    danger: string;
+    success: string;
+    rating_color_1: string;
+    rating_color_2: string;
+    rating_color_3: string;
+    rating_color_4: string;
+    rating_color_5: string;
+    rating_color_6: string;
+    rating_color_7: string;
+  };
 } = {
   dark: false,
   colors: {
-    background: "#fff",
-    card: "#fff",
+    background: "#f1f1f1",
+    card: "#f5f5f5",
     primary: "#E9C46A",
     primary_1: "#E9C46A",
     primary_2: "#e2b23e",
@@ -70,8 +77,15 @@ const theme: typeof DefaultTheme & {
     notification: "",
     success: "#98ec98",
     danger: "#FF8585",
+    rating_color_1: "#FF7F7F",
+    rating_color_2: "#FFCA66",
+    rating_color_3: "#FFF866",
+    rating_color_4: "#eafc69",
+    rating_color_5: "#BEFF4C",
+    rating_color_6: "#67CC47",
+    rating_color_7: "#56C733",
   },
-}
+};
 
 const styles = StyleSheet.create({
   mainWrapper: {
@@ -113,6 +127,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: sizes.SIZE_12,
   },
-})
+});
 
-export { styles, theme }
+export { styles, theme };
