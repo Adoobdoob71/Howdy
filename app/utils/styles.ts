@@ -48,10 +48,6 @@ export { sizes };
 
 const theme: typeof DefaultTheme & {
   colors: {
-    primary_1: string;
-    primary_2: string;
-    primary_3: string;
-    background_2: string;
     danger: string;
     success: string;
     rating_color_1: string;
@@ -67,13 +63,9 @@ const theme: typeof DefaultTheme & {
   colors: {
     background: "#f1f1f1",
     card: "#f5f5f5",
-    primary: "#E9C46A",
-    primary_1: "#E9C46A",
-    primary_2: "#e2b23e",
-    primary_3: "#dfaa27",
+    primary: "#039dfc",
     border: "#959595",
     text: "#000",
-    background_2: "#122027",
     notification: "",
     success: "#98ec98",
     danger: "#FF8585",
@@ -85,6 +77,16 @@ const theme: typeof DefaultTheme & {
     rating_color_6: "#67CC47",
     rating_color_7: "#56C733",
   },
+};
+
+const darker_colors = {
+  rating_color_1: "#854040",
+  rating_color_2: "#94753a",
+  rating_color_3: "#918d3a",
+  rating_color_4: "#808a3b",
+  rating_color_5: "#53701f",
+  rating_color_6: "#244d18",
+  rating_color_7: "#235713",
 };
 
 const styles = StyleSheet.create({
@@ -129,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { styles, theme };
+export { styles, theme, darker_colors };

@@ -8,13 +8,17 @@ import {
   ExpandableCalendar,
 } from "react-native-calendars";
 import { STATUSBAR_HEIGHT } from "./utils/constants";
-import { DaySquare } from "./components/DaySquare/DaySquare";
+import { DaySquare } from "./components/DaySquare";
+import { useIndex } from "./hooks/useIndex";
+import { NewReport } from "./fragments/NewReport";
 
 export default function Page() {
+  const { newReportRef } = useIndex();
+
   return (
     <View style={styles.mainWrapper}>
       <StatusBar barStyle="dark-content" translucent animated />
-      <CalendarProvider date="2023-06-10" showTodayButton>
+      <CalendarProvider date="2023-06-17" showTodayButton>
         <View style={stylesheet.statusBar}></View>
 
         <ExpandableCalendar
@@ -25,8 +29,9 @@ export default function Page() {
           allowShadow={false}
           dayComponent={(dayProps) => (
             <DaySquare
-              rating={Math.round(Math.random() * 7)}
               {...dayProps}
+              newReportRef={newReportRef}
+              //@ts-ignore
               onPress={() => dayProps.onPress(dayProps.date)}
             />
           )}
@@ -35,6 +40,9 @@ export default function Page() {
         />
         <View style={stylesheet.container}></View>
       </CalendarProvider>
+      <Modalize ref={newReportRef} withHandle={false} adjustToContentHeight>
+        <NewReport />
+      </Modalize>
     </View>
   );
 }
