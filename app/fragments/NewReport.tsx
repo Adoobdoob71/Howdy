@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableNativeFeedback,
   View,
+  ActivityIndicator,
 } from "react-native";
 import { sizes, styles, theme } from "../utils/styles";
 import { useNewReport } from "../hooks/useNewReport";
@@ -16,14 +17,15 @@ interface Props {
 }
 
 export const NewReport: FC<Props> = ({ date }) => {
-  const { activeMood, setActiveMood, note, setNote } = useNewReport();
+  const { activeMood, setActiveMood, note, setNote, loading, insertNewReport } =
+    useNewReport();
 
   return (
     <View style={stylesheet.main}>
-      <View style={[styles.column, { marginTop: sizes.SIZE_8 }]}>
+      <View style={[styles.rowCenter, { marginTop: sizes.SIZE_8 }]}>
         <Text style={stylesheet.title}>How was your day?</Text>
-        <Text style={stylesheet.date}>
-          {date === undefined ? "June 6th 2023" : "nah"}
+        <Text style={[stylesheet.date, { marginLeft: "auto" }]}>
+          {date?.day}/{date?.month}/{date?.year}
         </Text>
       </View>
       <View style={[styles.rowCenter, stylesheet.moodBar]}>
@@ -78,15 +80,20 @@ export const NewReport: FC<Props> = ({ date }) => {
         <Text style={stylesheet.noteLimit}>{note.length}/120</Text>
       </View>
       <Button
-        onPress={() => {}}
+        onPress={() => insertNewReport()}
         style={{
           width: "92.5%",
           alignSelf: "center",
           marginVertical: sizes.SIZE_16,
         }}
-        disabled={note.length === 0}
+        disabled={loading || note.length === 0}
         text="Done"
       />
+      {loading && (
+        <View style={[styles.center, stylesheet.loadingOverlay]}>
+          <ActivityIndicator color={theme.colors.primary} size="large" />
+        </View>
+      )}
     </View>
   );
 };
@@ -133,5 +140,12 @@ const stylesheet = StyleSheet.create({
   date: {
     fontSize: sizes.SIZE_12,
     color: theme.colors.border,
+  },
+  loadingOverlay: {
+    position: "absolute",
+    backgroundColor: `${theme.colors.card}AA`,
+    borderRadius: sizes.SIZE_12,
+    height: "100%",
+    width: "107%",
   },
 });

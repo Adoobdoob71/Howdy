@@ -26,7 +26,12 @@ export const DaySquare: FC<Props> = ({
   const openNewReport = () => newReportRef.current?.open();
   return (
     <View style={{ borderRadius: sizes.SIZE_4, overflow: "hidden" }}>
-      <TouchableNativeFeedback onPress={openNewReport}>
+      <TouchableNativeFeedback
+        onPress={() => {
+          openNewReport();
+          onPress();
+        }}
+      >
         <View
           style={[
             stylesheet.main,
