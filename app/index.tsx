@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar } from "react-native";
+import { StyleSheet, Text, View, StatusBar, ToastAndroid } from "react-native";
 import { sizes, styles } from "./utils/styles";
 import { Modalize } from "react-native-modalize";
 import {
@@ -13,7 +13,7 @@ import { useIndex } from "./hooks/useIndex";
 import { NewReport } from "./fragments/NewReport";
 
 export default function Page() {
-  const { newReportRef } = useIndex();
+  const { newReportRef, chosenDate, setChosenDate } = useIndex();
 
   return (
     <View style={styles.mainWrapper}>
@@ -31,8 +31,11 @@ export default function Page() {
             <DaySquare
               {...dayProps}
               newReportRef={newReportRef}
-              //@ts-ignore
-              onPress={() => dayProps.onPress(dayProps.date)}
+              onPress={() => {
+                setChosenDate(dayProps.date);
+                //@ts-ignore
+                dayProps.onPress(dayProps.date);
+              }}
             />
           )}
           style={{ borderBottomWidth: 0.2, borderColor: "#757575" }}
@@ -41,7 +44,7 @@ export default function Page() {
         <View style={stylesheet.container}></View>
       </CalendarProvider>
       <Modalize ref={newReportRef} withHandle={false} adjustToContentHeight>
-        <NewReport />
+        <NewReport date={chosenDate} />
       </Modalize>
     </View>
   );

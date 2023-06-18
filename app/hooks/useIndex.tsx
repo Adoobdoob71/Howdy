@@ -1,12 +1,19 @@
-import { useRef } from "react"
-import { Modalize } from "react-native-modalize"
+import { useRef, useState } from "react";
+import { DateData } from "react-native-calendars";
+import { Modalize } from "react-native-modalize";
 
 const useIndex = () => {
-    const newReportRef = useRef<Modalize>(null);
+  const [chosenDate, setChosenDate] = useState<(string & DateData) | undefined>(
+    undefined
+  );
 
-    return {
-        newReportRef
-    }
-}
+  const newReportRef = useRef<Modalize>(null);
 
-export { useIndex }
+  return {
+    newReportRef,
+    chosenDate,
+    setChosenDate,
+  };
+};
+
+export { useIndex };

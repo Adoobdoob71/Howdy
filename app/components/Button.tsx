@@ -7,13 +7,32 @@ interface Props extends PropsWithChildren {
   onPress: () => void;
   style?: StyleProperty;
   text: string;
+  disabled?: boolean;
 }
 
-export const Button: FC<Props> = ({ onPress, style, text }) => {
+export const Button: FC<Props> = ({ onPress, style, text, disabled }) => {
   return (
-    <View style={[style, { borderRadius: sizes.SIZE_4, overflow: "hidden" }]}>
-      <TouchableNativeFeedback onPress={onPress}>
-        <View style={[stylesheet.main, styles.center]}>
+    <View
+      style={[
+        style,
+        {
+          borderRadius: sizes.SIZE_4,
+          overflow: "hidden",
+        },
+      ]}
+    >
+      <TouchableNativeFeedback onPress={onPress} disabled={disabled}>
+        <View
+          style={[
+            stylesheet.main,
+            styles.center,
+            {
+              backgroundColor: disabled
+                ? theme.colors.border
+                : theme.colors.primary,
+            },
+          ]}
+        >
           <Text style={stylesheet.text}>{text}</Text>
         </View>
       </TouchableNativeFeedback>

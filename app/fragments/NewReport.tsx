@@ -8,13 +8,24 @@ import {
 import { sizes, styles, theme } from "../utils/styles";
 import { useNewReport } from "../hooks/useNewReport";
 import { Button } from "../components/Button";
+import { DateData } from "react-native-calendars";
+import { FC } from "react";
 
-export const NewReport = () => {
+interface Props {
+  date: (string & DateData) | undefined;
+}
+
+export const NewReport: FC<Props> = ({ date }) => {
   const { activeMood, setActiveMood, note, setNote } = useNewReport();
 
   return (
     <View style={stylesheet.main}>
-      <Text style={stylesheet.title}>How was your day?</Text>
+      <View style={[styles.column, { marginTop: sizes.SIZE_8 }]}>
+        <Text style={stylesheet.title}>How was your day?</Text>
+        <Text style={stylesheet.date}>
+          {date === undefined ? "June 6th 2023" : "nah"}
+        </Text>
+      </View>
       <View style={[styles.rowCenter, stylesheet.moodBar]}>
         {[...Array(8).keys()].slice(1).map((rating) => (
           <View
@@ -73,6 +84,7 @@ export const NewReport = () => {
           alignSelf: "center",
           marginVertical: sizes.SIZE_16,
         }}
+        disabled={note.length === 0}
         text="Done"
       />
     </View>
@@ -85,7 +97,6 @@ const stylesheet = StyleSheet.create({
   },
   title: {
     fontSize: sizes.SIZE_20,
-    marginTop: sizes.SIZE_5,
     fontWeight: "bold",
     color: theme.colors.text,
   },
@@ -118,5 +129,9 @@ const stylesheet = StyleSheet.create({
     fontSize: sizes.SIZE_10,
     fontWeight: "bold",
     alignSelf: "flex-end",
+  },
+  date: {
+    fontSize: sizes.SIZE_12,
+    color: theme.colors.border,
   },
 });
