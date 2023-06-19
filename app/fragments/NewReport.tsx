@@ -17,8 +17,8 @@ interface Props {
 }
 
 export const NewReport: FC<Props> = ({ date }) => {
-  const { activeMood, setActiveMood, note, setNote, loading, insertNewReport } =
-    useNewReport();
+  const { activeMood, setActiveMood, note, setNote, loading, saveNewReport } =
+    useNewReport(date);
 
   return (
     <View style={stylesheet.main}>
@@ -80,7 +80,7 @@ export const NewReport: FC<Props> = ({ date }) => {
         <Text style={stylesheet.noteLimit}>{note.length}/120</Text>
       </View>
       <Button
-        onPress={() => insertNewReport()}
+        onPress={() => saveNewReport()}
         style={{
           width: "92.5%",
           alignSelf: "center",
