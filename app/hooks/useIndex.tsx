@@ -13,6 +13,7 @@ const useIndex = () => {
   const [reports, setReports] = useState<Report[]>([]);
 
   const newReportRef = useRef<Modalize>(null);
+  const viewReportRef = useRef<Modalize>(null);
 
   useEffect(() => {
     try {
@@ -59,6 +60,7 @@ const useIndex = () => {
 
   return {
     newReportRef,
+    viewReportRef,
     chosenDate,
     setChosenDate,
     conn,

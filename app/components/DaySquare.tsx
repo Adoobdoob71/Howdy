@@ -15,22 +15,13 @@ interface Props {
   onPress: () => void;
   date?: DateData | undefined;
   note: string;
-  newReportRef: RefObject<IHandles>;
 }
 
-export const DaySquare: FC<Props> = ({
-  rating,
-  onPress,
-  date,
-  note,
-  newReportRef,
-}) => {
-  const openNewReport = () => newReportRef.current?.open();
+export const DaySquare: FC<Props> = ({ rating, onPress, date, note }) => {
   return (
     <View style={{ borderRadius: sizes.SIZE_4, overflow: "hidden" }}>
       <TouchableNativeFeedback
         onPress={() => {
-          openNewReport();
           onPress();
         }}
       >

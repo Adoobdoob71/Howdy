@@ -21,6 +21,7 @@ import { DayProps } from "react-native-calendars/src/calendar/day";
 export default function Page() {
   const {
     newReportRef,
+    viewReportRef,
     chosenDate,
     setChosenDate,
     conn,
@@ -62,10 +63,13 @@ export default function Page() {
                   rating={findItem(dayProps)?.rating}
                   note={findItem(dayProps)?.note}
                   onPress={() => {
+                    setChosenDate(dayProps.date);
                     if (findItem(dayProps) !== undefined) {
-                      setChosenDate(dayProps.date);
                       //@ts-ignore
                       dayProps.onPress(dayProps.date);
+                      viewReportRef.current?.open();
+                    } else {
+                      newReportRef.current?.open();
                     }
                   }}
                 />
@@ -76,6 +80,13 @@ export default function Page() {
             <View style={stylesheet.container}></View>
           </CalendarProvider>
           <Modalize ref={newReportRef} withHandle={false} adjustToContentHeight>
+            <NewReport date={chosenDate} />
+          </Modalize>
+          <Modalize
+            ref={viewReportRef}
+            withHandle={false}
+            adjustToContentHeight
+          >
             <NewReport date={chosenDate} />
           </Modalize>
         </View>
