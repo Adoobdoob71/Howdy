@@ -14,6 +14,7 @@ interface Props {
   rating?: 1 | 2 | 3 | 4 | 5 | 6 | 7;
   onPress: () => void;
   date?: DateData | undefined;
+  note: string;
   newReportRef: RefObject<IHandles>;
 }
 
@@ -21,6 +22,7 @@ export const DaySquare: FC<Props> = ({
   rating,
   onPress,
   date,
+  note,
   newReportRef,
 }) => {
   const openNewReport = () => newReportRef.current?.open();

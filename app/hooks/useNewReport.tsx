@@ -1,29 +1,45 @@
 import { useContext, useState } from "react";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
-import RealmContext from "../context/RealmContext";
 import { DateData } from "react-native-calendars";
+import dbContext from "../context/dbContext";
+import { Report } from "../database/models/Report";
+import reports from "../context/reports";
 
 export const useNewReport = (date: (string & DateData) | undefined) => {
   const [activeMood, setActiveMood] = useState(4);
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { useRealm } = useContext(RealmContext);
-  const realm = useRealm();
+  const { connector } = useContext(dbContext);
+  const { refreshReports } = useContext(reports);
 
-  const saveNewReport = () => {
+  const saveNewReport = async () => {
     setLoading(true);
-    realm.write(() => {
-      //@ts-ignore
-      const d = new Date(date?.dateString);
-      realm.create("Report", { rating: activeMood, note: note, date: d });
-    });
+    try {
+      const newReport = new Report();
+      newReport.rating = activeMood;
+      newReport.note = note;
+      const d = new Date();
+      d.setDate(date.day);
+      d.setMonth(date.month);
+      d.setFullYear(date.year);
+      newReport.when = d;
+      const reportRepository = connector?.getRepository(Report);
+      await reportRepository?.save(newReport);
+      Toast.show({
+        text1: "Amazing!",
+        text2: "New report added!",
+        type: "success",
+      });
+      refreshReports();
+    } catch (error) {
+      Toast.show({
+        text1: "Uh oh",
+        text2: "Something went wrong...",
+        type: "error",
+      });
+    }
     setLoading(false);
-    Toast.show({
-      text1: "Amazing!",
-      text2: "New report added!",
-      type: "success",
-    });
   };
 
   return {

@@ -1,23 +1,49 @@
+import "reflect-metadata";
+import "react-native-get-random-values";
 import { StyleSheet, View, StatusBar } from "react-native";
 import { sizes, styles, theme } from "./utils/styles";
 import { Modalize } from "react-native-modalize";
-import { CalendarProvider, ExpandableCalendar } from "react-native-calendars";
+import {
+  CalendarProvider,
+  DateData,
+  ExpandableCalendar,
+} from "react-native-calendars";
 import { STATUSBAR_HEIGHT } from "./utils/constants";
 import { DaySquare } from "./components/DaySquare";
 import { useIndex } from "./hooks/useIndex";
 import { NewReport } from "./fragments/NewReport";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { BaseToast } from "react-native-toast-message";
-import RealmContext, { realmContext } from "./context/RealmContext";
+import DbContext from "./context/dbContext";
+import Reports from "./context/reports";
+import { DayProps } from "react-native-calendars/src/calendar/day";
 
 export default function Page() {
-  const { newReportRef, chosenDate, setChosenDate } = useIndex();
+  const {
+    newReportRef,
+    chosenDate,
+    setChosenDate,
+    conn,
+    reports,
+    readReports,
+  } = useIndex();
 
-  const { RealmProvider } = realmContext;
+  const findItem = (
+    dayProps: DayProps & {
+      date?: DateData;
+    }
+  ) =>
+    reports.find((item) => {
+      return (
+        item.when.getDate() === dayProps.date.day &&
+        item.when.getMonth() === dayProps.date.month &&
+        item.when.getFullYear() === dayProps.date.year
+      );
+    });
 
   return (
-    <RealmProvider>
-      <RealmContext.Provider value={realmContext}>
+    <DbContext.Provider value={{ connector: conn }}>
+      <Reports.Provider value={{ reports, refreshReports: readReports }}>
         <View style={styles.mainWrapper}>
           <StatusBar barStyle="dark-content" translucent animated />
           <View style={stylesheet.statusBar}></View>
@@ -32,10 +58,15 @@ export default function Page() {
                 <DaySquare
                   {...dayProps}
                   newReportRef={newReportRef}
+                  //@ts-ignore
+                  rating={findItem(dayProps)?.rating}
+                  note={findItem(dayProps)?.note}
                   onPress={() => {
-                    setChosenDate(dayProps.date);
-                    //@ts-ignore
-                    dayProps.onPress(dayProps.date);
+                    if (findItem(dayProps) !== undefined) {
+                      setChosenDate(dayProps.date);
+                      //@ts-ignore
+                      dayProps.onPress(dayProps.date);
+                    }
                   }}
                 />
               )}
@@ -48,62 +79,62 @@ export default function Page() {
             <NewReport date={chosenDate} />
           </Modalize>
         </View>
-        <Toast
-          config={{
-            success: (props) => (
-              <BaseToast
-                {...props}
-                style={{
-                  borderLeftColor: theme.colors.success,
-                  borderLeftWidth: sizes.SIZE_8,
-                  borderRadius: sizes.SIZE_8,
-                  backgroundColor: "transparent",
-                  elevation: sizes.SIZE_4,
-                }}
-                text1Style={{
-                  color: theme.colors.text,
-                  fontSize: sizes.SIZE_14,
-                }}
-                text2Style={{
-                  color: theme.colors.text,
-                  fontSize: sizes.SIZE_12,
-                }}
-                contentContainerStyle={{
-                  backgroundColor: theme.colors.background,
-                  borderTopRightRadius: sizes.SIZE_8,
-                  borderBottomRightRadius: sizes.SIZE_8,
-                }}
-              />
-            ),
-            error: (props) => (
-              <BaseToast
-                {...props}
-                style={{
-                  borderLeftColor: theme.colors.danger,
-                  borderLeftWidth: sizes.SIZE_8,
-                  borderRadius: sizes.SIZE_8,
-                  backgroundColor: "transparent",
-                  elevation: sizes.SIZE_4,
-                }}
-                text1Style={{
-                  color: theme.colors.text,
-                  fontSize: sizes.SIZE_14,
-                }}
-                text2Style={{
-                  color: theme.colors.text,
-                  fontSize: sizes.SIZE_12,
-                }}
-                contentContainerStyle={{
-                  backgroundColor: theme.colors.background,
-                  borderTopRightRadius: sizes.SIZE_8,
-                  borderBottomRightRadius: sizes.SIZE_8,
-                }}
-              />
-            ),
-          }}
-        />
-      </RealmContext.Provider>
-    </RealmProvider>
+      </Reports.Provider>
+      <Toast
+        config={{
+          success: (props) => (
+            <BaseToast
+              {...props}
+              style={{
+                borderLeftColor: theme.colors.success,
+                borderLeftWidth: sizes.SIZE_8,
+                borderRadius: sizes.SIZE_8,
+                backgroundColor: "transparent",
+                elevation: sizes.SIZE_4,
+              }}
+              text1Style={{
+                color: theme.colors.text,
+                fontSize: sizes.SIZE_14,
+              }}
+              text2Style={{
+                color: theme.colors.text,
+                fontSize: sizes.SIZE_12,
+              }}
+              contentContainerStyle={{
+                backgroundColor: theme.colors.background,
+                borderTopRightRadius: sizes.SIZE_8,
+                borderBottomRightRadius: sizes.SIZE_8,
+              }}
+            />
+          ),
+          error: (props) => (
+            <BaseToast
+              {...props}
+              style={{
+                borderLeftColor: theme.colors.danger,
+                borderLeftWidth: sizes.SIZE_8,
+                borderRadius: sizes.SIZE_8,
+                backgroundColor: "transparent",
+                elevation: sizes.SIZE_4,
+              }}
+              text1Style={{
+                color: theme.colors.text,
+                fontSize: sizes.SIZE_14,
+              }}
+              text2Style={{
+                color: theme.colors.text,
+                fontSize: sizes.SIZE_12,
+              }}
+              contentContainerStyle={{
+                backgroundColor: theme.colors.background,
+                borderTopRightRadius: sizes.SIZE_8,
+                borderBottomRightRadius: sizes.SIZE_8,
+              }}
+            />
+          ),
+        }}
+      />
+    </DbContext.Provider>
   );
 }
 
